@@ -3,7 +3,7 @@ import random
 pygame.init()
 screenWidth = 604
 screenHeight = 604
-FPS = 4
+FPS = 30
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 0, 255)
@@ -38,6 +38,7 @@ class Cell:
         if self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
 
+    # Function adds the Unvisited to the 2D array and returns the next cell
     def checkN(self):
         neighbors = [[]*cols]*rows
         for i in range(len(neighbors)):
@@ -58,13 +59,13 @@ class Cell:
                     neighbors[i].append(bottom)
                 if left.visited is False:
                     neighbors[i].append(left)
-        if len(neighbors) > 0:
-            p = random.choice(neighbors)
-            return p
+                if len(neighbors) > 0:
+                    r = random.randrange(0, len(neighbors))
+                    m = random.randrange(0, len(neighbors[i]))
+                    return neighbors[r][m]
 
 
 # Rows and Columns, length will be our width of each cell
-global rows, cols, length
 length = 40
 rows = screenWidth // length
 cols = screenHeight // length
@@ -83,6 +84,7 @@ def display(surface):
         grid[i].draw(surface)
     # Mark first cell as visited
     current.visited = True
+    # Check neighbors of current cell
     nextCell = current.checkN()
     if nextCell:
         nextCell.visited = True
