@@ -3,7 +3,7 @@ import random
 pygame.init()
 screenWidth = 604
 screenHeight = 604
-
+FPS = 2
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 0, 255)
@@ -19,7 +19,7 @@ class Cell:
         # Checks to see if wall(s) of the cell exists
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
-        self.neighbors = checkN()
+        # self.neighbors = checkN()
 
     def draw(self, surface):
         x = self.i * length
@@ -39,7 +39,7 @@ class Cell:
         if self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
 
-    def checkN():
+    def checkN(self):
         neighbors = []
         # Indexing
         top = grid[index(i, j - 1)]
@@ -56,18 +56,14 @@ class Cell:
             neighbors.append(bottom)
         if left and left.visited is False:
             neighbors.append(left)
-
+        # pick at random
         if len(neighbors) > 0:
             p = random.choice(neighbors)
-            return neighbors[p]
-        else:
-            return -1
-
-
+            return p
 
 
 # Rows and Columns, length will be our width of each cell
-global rows, cols, length, current
+global rows, cols, length
 length = 40
 rows = screenWidth // length
 cols = screenHeight // length
@@ -89,10 +85,15 @@ def index(i, j):
 
 
 def display(surface):
+    global current
     for i in range(len(grid)):
         grid[i].draw(surface)
     # Mark first cell as visited
     current.visited = True
+    next = current.checkN()
+    if (next):
+        next.visited = True
+        current = next
 
 
 displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
@@ -100,11 +101,14 @@ pygame.display.set_caption("Maze Generator")
 
 
 def main():
+    global FPS
+    FPSclock = pygame.time.Clock()
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+        FPSclock.tick(FPS)
         display(displayWindow)
         pygame.display.update()
 
