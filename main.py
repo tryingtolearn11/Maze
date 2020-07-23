@@ -13,8 +13,7 @@ class Cell:
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
-        self.Rect(x, y, length, length)
-        self.pygame.draw.rect(displayWindow, (255, 255, 0), s)
+        pygame.draw.rect(displayWindow, (0, 255, 0), (x, y, length, length), 2)
 
 
 # Rows and Colums
@@ -30,9 +29,9 @@ for i in range(rows):
         grid.append(cell)
 
 
-def display():
-    for x in range(len(grid)):
-        grid[i].draw(displayWindow)
+def display(surface):
+    for i in range(len(grid)):
+        grid[i].draw(surface)
 
 
 displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
@@ -45,9 +44,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-    display()
-    pygame.display.update()
+        display(displayWindow)
+        pygame.display.update()
 
 
 if __name__ == '__main__':
