@@ -55,17 +55,18 @@ class Cell:
         left = grid[self.index(i - 1, j)]
 
         # List of Unvisited Cells, cells must be defined and Unvisited
-        if top and top.visited is False:
+        if top != -1 and top.visited is False:
             neighbors.append(top)
-        if right and right.visited is False:
+        if right != -1 and right.visited is False:
             neighbors.append(right)
-        if bottom and bottom.visited is False:
+        if bottom != -1 and bottom.visited is False:
             neighbors.append(bottom)
-        if left and left.visited is False:
+        if left != -1 and left.visited is False:
             neighbors.append(left)
         # pick at random
         if len(neighbors) > 0:
             r = random.randrange(0, len(neighbors))
+            print(neighbors[r])
             return neighbors[r]
 
 
