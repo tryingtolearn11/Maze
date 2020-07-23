@@ -39,30 +39,31 @@ class Cell:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
 
     # Function adds the Unvisited to the 2D array and returns the next cell
-    def checkN(self):
+    def countNeighbors(self):
         neighbors = [[]*cols]*rows
         for i in range(len(neighbors)):
             for j in range(len(neighbors[i])):
-                x = len(neighbors)
-                y = len(neighbors[i])
+                x = rows
+                y = cols
                 # Indexing
                 top = grid[(((i + 1) + x) % x)][j]
                 right = grid[i][(((j + 1) + y) % y)]
                 bottom = grid[(((i - 1) + x) % x)][j]
                 left = grid[i][(((j - 1) + y) % y)]
                 # List of Unvisited Cells, cells must be defined and Unvisited
-                if top.visited is False:
+                if not top.visited:
                     neighbors[i].append(top)
-                if right.visited is False:
+                if not right.visited:
                     neighbors[i].append(right)
-                if bottom.visited is False:
+                if not bottom.visited:
                     neighbors[i].append(bottom)
-                if left.visited is False:
+                if not left.visited:
                     neighbors[i].append(left)
+
                 if len(neighbors) > 0:
-                    r = random.randrange(0, len(neighbors))
-                    m = random.randrange(0, len(neighbors[i]))
-                    return neighbors[r][m]
+                    p = random.choice(neighbors[i])
+                    print(p)
+                    return neighbors[p][p]
 
 
 # Rows and Columns, length will be our width of each cell
@@ -75,7 +76,7 @@ for i in range(rows):
     for j in range(cols):
         cell = Cell(i, j)
         grid.append(cell)
-current = grid[0]
+current = grid[19]
 
 
 def display(surface):
@@ -85,7 +86,7 @@ def display(surface):
     # Mark first cell as visited
     current.visited = True
     # Check neighbors of current cell
-    nextCell = current.checkN()
+    nextCell = current.countNeighbors()
     if nextCell:
         nextCell.visited = True
         current = nextCell
