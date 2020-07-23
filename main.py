@@ -1,8 +1,14 @@
 import pygame
 
 pygame.init()
-screenWidth = 400
-screenHeight = 400
+screenWidth = 600
+screenHeight = 600
+
+# Colors
+Red = (255, 0, 0)
+Blue = (0, 0, 255)
+Green = (0, 255, 0)
+White = (255, 255, 255)
 
 
 class Cell:
@@ -13,7 +19,7 @@ class Cell:
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
-        pygame.draw.rect(displayWindow, (0, 255, 0), (x, y, length, length), 2)
+        pygame.draw.rect(displayWindow, White, (x, y, length, length), 2)
 
 
 # Rows and Colums
