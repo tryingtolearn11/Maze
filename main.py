@@ -1,18 +1,17 @@
 import pygame
 import random
 pygame.init()
-screenWidth = 404
-screenHeight = 404
+screenWidth = 604
+screenHeight = 604
 FPS = 4
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 0, 255)
-Green = (0, 200, 0)
+Green = (0, 200, 100, 100)
 White = (255, 255, 255)
 
 
 class Cell:
-
     def __init__(self, i, j):
         self.i = i  # Row
         self.j = j  # Column
@@ -39,35 +38,29 @@ class Cell:
         if self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
 
-    def index(self, i, j):
-        # Test edge
-        if i < 0 or j < 0 or i > rows - 1 or j > cols - 1:
-            return -1
-        else:
-            return i + j * cols
-
     def checkN(self):
-        neighbors = []
-        # Indexing
-        top = grid[self.index(i, j - 1)]
-        right = grid[self.index(i + 1, j)]
-        bottom = grid[self.index(i, j + 1)]
-        left = grid[self.index(i - 1, j)]
-
-        # List of Unvisited Cells, cells must be defined and Unvisited
-        if top != -1 and top.visited is False:
-            neighbors.append(top)
-        if right != -1 and right.visited is False:
-            neighbors.append(right)
-        if bottom != -1 and bottom.visited is False:
-            neighbors.append(bottom)
-        if left != -1 and left.visited is False:
-            neighbors.append(left)
-        # pick at random
+        neighbors = [[]*cols]*rows
+        for i in range(len(neighbors)):
+            for j in range(len(neighbors[i])):
+                x = len(neighbors)
+                y = len(neighbors[i])
+                # Indexing
+                top = grid[(((i + 1) + x) % x)][j]
+                right = grid[i][(((j + 1) + y) % y)]
+                bottom = grid[(((i - 1) + x) % x)][j]
+                left = grid[i][(((j - 1) + y) % y)]
+                # List of Unvisited Cells, cells must be defined and Unvisited
+                if top.visited is False:
+                    neighbors[i].append(top)
+                if right.visited is False:
+                    neighbors[i].append(right)
+                if bottom.visited is False:
+                    neighbors[i].append(bottom)
+                if left.visited is False:
+                    neighbors[i].append(left)
         if len(neighbors) > 0:
-            r = random.randrange(0, len(neighbors))
-            print(neighbors[r])
-            return neighbors[r]
+            p = random.choice(neighbors)
+            return p
 
 
 # Rows and Columns, length will be our width of each cell
@@ -90,10 +83,10 @@ def display(surface):
         grid[i].draw(surface)
     # Mark first cell as visited
     current.visited = True
-    next = current.checkN()
-    if next:
-        next.visited = True
-        current = next
+    nextCell = current.checkN()
+    if nextCell:
+        nextCell.visited = True
+        current = nextCell
 
 
 displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
@@ -108,6 +101,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
         FPSclock.tick(FPS)
         display(displayWindow)
         pygame.display.update()
