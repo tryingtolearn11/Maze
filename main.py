@@ -3,7 +3,7 @@ import random
 pygame.init()
 screenWidth = 604
 screenHeight = 604
-FPS = 5
+FPS = 10
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 0, 255)
@@ -42,25 +42,23 @@ class Cell:
     def countNeighbors(self):
         global x, y
         neighbors = []
-        #top = grid[i][(j + 1 + length) % length]
-        #right = grid[((i + 1) % length)][j]
-        #bottom = grid[i][(j + 1) % length]
-        #left = grid[(i - 1 + length) % length][j]
 
-        top = grid[(((i + 1) + x) % x)][j]
-        right = grid[i][(((j + 1) + y) % y)]
-        bottom = grid[(((i - 1) + x) % x)][j]
-        left = grid[i][(((j - 1) + y) % y)]
+        for i in range(x):
+            for j in range(y):
+                top = grid[(((i + 1) + x) % x)][j]
+                right = grid[i][(((j + 1) + y) % y)]
+                bottom = grid[(((i - 1) + x) % x)][j]
+                left = grid[i][(((j - 1) + y) % y)]
 
-        if not top.visited:
-            neighbors.append(top)
-        if not right.visited:
-            neighbors.append(right)
-        if not bottom.visited:
-            neighbors.append(bottom)
-        if not left.visited:
-            neighbors.append(left)
-        print(len(neighbors))
+                if not top.visited:
+                    neighbors.append(top)
+                if not right.visited:
+                    neighbors.append(right)
+                if not bottom.visited:
+                    neighbors.append(bottom)
+                if not left.visited:
+                    neighbors.append(left)
+        # pick random unvisted cell as our next
         if len(neighbors) > 0:
             p = random.randrange(0, len(neighbors))
             return neighbors[p]
