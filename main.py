@@ -11,13 +11,6 @@ Green = (0, 200, 100, 100)
 White = (255, 255, 255)
 
 
-def index(i, j):
-    if i < 0 or j < 0 or i > rows - 1 or j > cols - 1:
-        return - 1
-    else:
-        return i + j * cols
-
-
 class Cell:
     def __init__(self, i, j):
         self.i = i  # Row
@@ -47,25 +40,25 @@ class Cell:
 
     # Function adds the Unvisited to the 2D array and returns the next cell
     def countNeighbors(self):
+        global x, y
         neighbors = []
 
-        top = grid[index(i, j - 1)]
-        right = grid[index(i + 1, j)]
-        bottom = grid[index(i, j + 1)]
-        left = grid[index(i - 1, j)]
+        top = grid[(((i + 1) + x) % x)][j]
+        right = grid[i][(((j + 1) + y) % y)]
+        bottom = grid[(((i - 1) + x) % x)][j]
+        left = grid[i][(((j - 1) + y) % y)]
 
-        if top and not top.visited:
+        if not top.visited:
             neighbors.append(top)
-        if right and not right.visited:
+        if not right.visited:
             neighbors.append(right)
-        if bottom and not bottom.visited:
+        if not bottom.visited:
             neighbors.append(bottom)
-        if left and not left.visited:
+        if not left.visited:
             neighbors.append(left)
 
         if len(neighbors) > 0:
             p = random.randrange(0, len(neighbors))
-            print(p)
             return neighbors[p]
 
 
@@ -73,19 +66,23 @@ class Cell:
 length = 40
 rows = screenWidth // length
 cols = screenHeight // length
+print(rows, cols)
 # store cells
-grid = []
+grid = [[]*cols]*rows
 for i in range(rows):
     for j in range(cols):
         cell = Cell(i, j)
-        grid.append(cell)
-current = grid[19]
+        grid[i].append(cell)
+current = grid[0][0]
+x = len(grid)
+y = len(grid[i])
 
 
 def display(surface):
     global current
     for i in range(len(grid)):
-        grid[i].draw(surface)
+        for j in range(len(grid[i])):
+            grid[i][j].draw(surface)
     # Mark first cell as visited
     current.visited = True
     # Check neighbors of current cell
