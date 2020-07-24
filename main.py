@@ -46,24 +46,23 @@ class Cell:
     def countNeighbors(self, grid):
         global x, y
         neighbors = []
-        for i in range(x):
-            for j in range(y):
-                if self.i == 0:
-                    neighbors.append(None)
-                else:
-                    neighbors.append(grid[self.i - 1][self.j])
-                if self.i == x - 1:
-                    neighbors.append(None)
-                else:
-                    neighbors.append(grid[self.i + 1][self.j])
-                if self.j == 0:
-                    neighbors.append(None)
-                else:
-                    neighbors.append(grid[self.i][self.j - 1])
-                if self.j == y - 1:
-                    neighbors.append(None)
-                else:
-                    neighbors.append(grid[self.i][self.j + 1])
+
+        if self.i == 0:
+            neighbors.append(None)
+        else:
+            neighbors.append(grid[self.i - 1][self.j])
+        if self.i == x - 1:
+            neighbors.append(None)
+        else:
+            neighbors.append(grid[self.i + 1][self.j])
+        if self.j == 0:
+            neighbors.append(None)
+        else:
+            neighbors.append(grid[self.i][self.j - 1])
+        if self.j == y - 1:
+            neighbors.append(None)
+        else:
+            neighbors.append(grid[self.i][self.j + 1])
         # pick random unvisted cell as our next
         if len(neighbors) > 0:
             r = random.choice(neighbors)
@@ -81,7 +80,7 @@ rows = screenWidth // length
 cols = screenHeight // length
 print(rows, cols)
 # Stack for backtracking
-stack = []
+# stack = []
 # store cells
 grid = [[]*cols]*rows
 for i in range(rows):
