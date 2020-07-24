@@ -3,12 +3,19 @@ import random
 pygame.init()
 screenWidth = 604
 screenHeight = 604
-FPS = 30
+FPS = 5
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 0, 255)
 Green = (0, 200, 100, 100)
 White = (255, 255, 255)
+
+
+def index(i, j):
+    if i < 0 or j < 0 or i > rows - 1 or j > cols - 1:
+        return - 1
+    else:
+        return i + j * cols
 
 
 class Cell:
@@ -40,30 +47,26 @@ class Cell:
 
     # Function adds the Unvisited to the 2D array and returns the next cell
     def countNeighbors(self):
-        neighbors = [[]*cols]*rows
-        for i in range(len(neighbors)):
-            for j in range(len(neighbors[i])):
-                x = rows
-                y = cols
-                # Indexing
-                top = grid[(((i + 1) + x) % x)][j]
-                right = grid[i][(((j + 1) + y) % y)]
-                bottom = grid[(((i - 1) + x) % x)][j]
-                left = grid[i][(((j - 1) + y) % y)]
-                # List of Unvisited Cells, cells must be defined and Unvisited
-                if not top.visited:
-                    neighbors[i].append(top)
-                if not right.visited:
-                    neighbors[i].append(right)
-                if not bottom.visited:
-                    neighbors[i].append(bottom)
-                if not left.visited:
-                    neighbors[i].append(left)
+        neighbors = []
 
-                if len(neighbors) > 0:
-                    p = random.choice(neighbors[i])
-                    print(p)
-                    return neighbors[p][p]
+        top = grid[index(i, j - 1)]
+        right = grid[index(i + 1, j)]
+        bottom = grid[index(i, j + 1)]
+        left = grid[index(i - 1, j)]
+
+        if top and not top.visited:
+            neighbors.append(top)
+        if right and not right.visited:
+            neighbors.append(right)
+        if bottom and not bottom.visited:
+            neighbors.append(bottom)
+        if left and not left.visited:
+            neighbors.append(left)
+
+        if len(neighbors) > 0:
+            p = random.randrange(0, len(neighbors))
+            print(p)
+            return neighbors[p]
 
 
 # Rows and Columns, length will be our width of each cell
