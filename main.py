@@ -3,12 +3,13 @@ import random
 pygame.init()
 screenWidth = 604
 screenHeight = 604
-FPS = 10
+FPS = 30
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 0, 255)
-Green = (0, 200, 100, 100)
+Green = (0, 200, 100, 128)
 White = (255, 255, 255)
+Black = (0, 0, 0)
 
 
 class Cell:
@@ -23,6 +24,8 @@ class Cell:
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
+        if self.visited:
+            pygame.draw.rect(displayWindow, Green, (x, y, length, length))
         # Top Line                             Start Pos,  End Pos
         if self.wall[0]:
             pygame.draw.line(displayWindow, White, (x, y), (x + length, y), 1)
@@ -35,8 +38,7 @@ class Cell:
         # Left
         if self.wall[3]:
             pygame.draw.line(displayWindow, White, (x, y + length), (x, y), 1)
-        if self.visited:
-            pygame.draw.rect(displayWindow, Green, (x, y, length, length))
+
 
     # Function adds the Unvisited to the 2D array and returns the next cell
     def countNeighbors(self):
