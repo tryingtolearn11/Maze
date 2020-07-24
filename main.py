@@ -3,13 +3,16 @@ import random
 pygame.init()
 screenWidth = 604
 screenHeight = 604
-FPS = 30
+FPS = 20
+
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 100, 200, 50)
 Green = (0, 200, 100, 50)
 White = (255, 255, 255)
 Black = (0, 0, 0)
+
+# TODO: FIX THE COUNTING FUNCTION- MESSES UP THE PATHING
 
 
 class Cell:
@@ -46,6 +49,7 @@ class Cell:
 
         for i in range(x):
             for j in range(y):
+
                 top = grid[(((i + 1) + x) % x)][j]
                 right = grid[i][(((j + 1) + y) % y)]
                 bottom = grid[(((i - 1) + x) % x)][j]
@@ -61,6 +65,7 @@ class Cell:
                     neighbors.append(left)
         # pick random unvisted cell as our next
             if len(neighbors) > 0:
+                print(len(neighbors))
                 r = random.randrange(0, len(neighbors))
                 return neighbors[r]
 
@@ -75,6 +80,8 @@ length = 40
 rows = screenWidth // length
 cols = screenHeight // length
 print(rows, cols)
+# Stack for backtracking
+stack = []
 # store cells
 grid = [[]*cols]*rows
 for i in range(rows):
@@ -94,12 +101,16 @@ def display(surface):
     # Mark first cell as visited
     current.visited = True
     current.marker()
+    # Push current cell to stack
+    stack.append(current)
     # Check neighbors of current cell
     nextCell = current.countNeighbors()
     if nextCell:
         nextCell.visited = True
         deleteWall(current, nextCell)
         current = nextCell
+    elif len(stack) > 0:
+        current = stack.pop()
 
 
 def deleteWall(a, b):
