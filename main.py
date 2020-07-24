@@ -39,7 +39,6 @@ class Cell:
         if self.wall[3]:
             pygame.draw.line(displayWindow, White, (x, y + length), (x, y), 1)
 
-
     # Function adds the Unvisited to the 2D array and returns the next cell
     def countNeighbors(self):
         global x, y
@@ -62,8 +61,8 @@ class Cell:
                     neighbors.append(left)
         # pick random unvisted cell as our next
         if len(neighbors) > 0:
-            p = random.randrange(0, len(neighbors))
-            return neighbors[p]
+            r = random.randrange(0, len(neighbors))
+            return neighbors[r]
 
 
 # Rows and Columns, length will be our width of each cell
@@ -93,7 +92,27 @@ def display(surface):
     nextCell = current.countNeighbors()
     if nextCell:
         nextCell.visited = True
+        deleteWall(current, nextCell)
         current = nextCell
+
+
+def deleteWall(a, b):
+    # Right and Left Walls
+    p = a.i - b.i
+    if p == 1:      # neighbor to the left
+        a.wall[3] = False
+        b.wall[1] = False
+    elif p == -1:  # neighbor to the right
+        a.wall[1] = False
+        b.wall[3] = False
+    # Top and Bottom Walls
+    q = a.j - b.j
+    if q == 1:     # neighbor above
+        a.wall[0] = False
+        b.wall[2] = False
+    elif q == -1:  # neighbor below
+        a.wall[2] = False
+        b.wall[0] = False
 
 
 displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
