@@ -23,9 +23,6 @@ class Cell:
         # Checks to see if wall(s) of the cell exists
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
-        self.option = [0, 1, 2, 3]
-        random.shuffle(self.option)
-        self.switch = True
 
     def draw(self, surface):
         x = self.i * length
@@ -50,34 +47,23 @@ class Cell:
     def countNeighbors(self, grid):
         global x, y
         self.neighbors = []
+        top = grid[(((self.i + 1) + x) % x)][self.j]
+        right = grid[self.i][(((self.j + 1) + y) % y)]
+        bottom = grid[(((self.i - 1) + x) % x)][self.j]
+        left = grid[self.i][(((self.j - 1) + y) % y)]
 
-        if self.i == 0:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i - 1][self.j])
-        if self.i == x - 1:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i + 1][self.j])
-        if self.j == 0:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i][self.j - 1])
-        if self.j == y - 1:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i][self.j + 1])
+        if not top.visited:
+            self.neighbors.append(top)
+        if not right.visited:
+            self.neighbors.append(right)
+        if not bottom.visited:
+            self.neighbors.append(bottom)
+        if not left.visited:
+            self.neighbors.append(left)
         # pick random unvisted cell as our next
-
-    def update(self, stack):
-        self.visited = True
-        stack.append(self)
-        option = self.option.pop()
-        n = self.neighbors[option]
-        if n and not n.visited:
-            self.wall[option] = False
-            n.visited = True
-            stack.append(n)
+        if len(self.neighbors) > 0:
+            p = random.randrange(0, len(self.neighbors))
+            return self.neighbors[p]
 
     def marker(self):
         x = self.i * length
@@ -90,8 +76,7 @@ length = 40
 rows = screenWidth // length
 cols = screenHeight // length
 print(rows, cols)
-# Stack for backtracking
-stack = []
+
 # store cells
 grid = [[]*cols]*rows
 for i in range(rows):
@@ -112,16 +97,13 @@ def display(surface):
     current.visited = True
     current.marker()
     # Push current cell to stack
-    stack.append(current)
+
     # Check neighbors of current cell
     nextCell = current.countNeighbors(grid)
     if nextCell:
         nextCell.visited = True
         deleteWall(current, nextCell)
         current = nextCell
-    elif len(stack):
-        current = stack.pop()
-        current.update(stack)
 
 
 def deleteWall(a, b):
