@@ -42,6 +42,10 @@ class Cell:
     def countNeighbors(self):
         global x, y
         neighbors = []
+        #top = grid[i][(j + 1 + length) % length]
+        #right = grid[((i + 1) % length)][j]
+        #bottom = grid[i][(j + 1) % length]
+        #left = grid[(i - 1 + length) % length][j]
 
         top = grid[(((i + 1) + x) % x)][j]
         right = grid[i][(((j + 1) + y) % y)]
@@ -56,7 +60,7 @@ class Cell:
             neighbors.append(bottom)
         if not left.visited:
             neighbors.append(left)
-
+        print(len(neighbors))
         if len(neighbors) > 0:
             p = random.randrange(0, len(neighbors))
             return neighbors[p]
