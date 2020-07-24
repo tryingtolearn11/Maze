@@ -27,6 +27,7 @@ class Cell:
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
+        # Our Path in Green
         if self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
         # Top Line                             Start Pos,  End Pos
@@ -52,6 +53,7 @@ class Cell:
         bottom = grid[(((self.i - 1) + x) % x)][self.j]
         left = grid[self.i][(((self.j - 1) + y) % y)]
 
+        # If the neighbor cell is unvisited add to array
         if not top.visited:
             self.neighbors.append(top)
         if not right.visited:
@@ -65,6 +67,7 @@ class Cell:
             p = random.randrange(0, len(self.neighbors))
             return self.neighbors[p]
 
+    # Highlights the current cell
     def marker(self):
         x = self.i * length
         y = self.j * length
@@ -96,8 +99,6 @@ def display(surface):
     # Mark first cell as visited
     current.visited = True
     current.marker()
-    # Push current cell to stack
-
     # Check neighbors of current cell
     nextCell = current.countNeighbors(grid)
     if nextCell:
