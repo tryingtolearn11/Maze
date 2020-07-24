@@ -6,7 +6,7 @@ screenHeight = 604
 FPS = 30
 # Colors
 Red = (255, 0, 0)
-Blue = (0, 0, 255)
+Blue = (0, 100, 200, 50)
 Green = (0, 200, 100, 50)
 White = (255, 255, 255)
 Black = (0, 0, 0)
@@ -60,9 +60,14 @@ class Cell:
                 if not left.visited:
                     neighbors.append(left)
         # pick random unvisted cell as our next
-        if len(neighbors) > 0:
-            r = random.randrange(0, len(neighbors))
-            return neighbors[r]
+            if len(neighbors) > 0:
+                r = random.randrange(0, len(neighbors))
+                return neighbors[r]
+
+    def marker(self):
+        x = self.i * length
+        y = self.j * length
+        pygame.draw.rect(displayWindow, Blue, (x, y, length, length))
 
 
 # Rows and Columns, length will be our width of each cell
@@ -88,6 +93,7 @@ def display(surface):
             grid[i][j].draw(surface)
     # Mark first cell as visited
     current.visited = True
+    current.marker()
     # Check neighbors of current cell
     nextCell = current.countNeighbors()
     if nextCell:
