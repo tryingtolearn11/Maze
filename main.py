@@ -23,13 +23,10 @@ class Cell:
         # Checks to see if wall(s) of the cell exists
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
-        self.randomNextCell = [0, 1, 2, 3]
-        random.shuffle(self.randomNextCell)
 
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
-        # Our Path in Green
         if self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
         # Top Line                             Start Pos,  End Pos
@@ -44,41 +41,33 @@ class Cell:
         # Left
         if self.wall[3]:
             pygame.draw.line(displayWindow, White, (x, y + length), (x, y), 1)
-        self.changed = False
 
-    # Function adds the Unvisited to the 2D array
+    # Function adds the Unvisited to the 2D array and returns the next cell
     def countNeighbors(self, grid):
         global x, y
-        self.neighbors = []
+        neighbors = []
+
         if self.i == 0:
-            self.neighbors.append(None)
+            neighbors.append(None)
         else:
-            self.neighbors.append(grid[self.i - 1][self.j])
+            neighbors.append(grid[self.i - 1][self.j])
         if self.i == x - 1:
-            self.neighbors.append(None)
+            neighbors.append(None)
         else:
-            self.neighbors.append(grid[self.i + 1][self.j])
+            neighbors.append(grid[self.i + 1][self.j])
         if self.j == 0:
-            self.neighbors.append(None)
+            neighbors.append(None)
         else:
-            self.neighbors.append(grid[self.i][self.j - 1])
+            neighbors.append(grid[self.i][self.j - 1])
         if self.j == y - 1:
-            self.neighbors.append(None)
+            neighbors.append(None)
         else:
-            self.neighbors.append(grid[self.i][self.j + 1])
+            neighbors.append(grid[self.i][self.j + 1])
+        # pick random unvisted cell as our next
+        if len(neighbors) > 0:
+            r = random.choice(neighbors)
+            return r
 
-    # Function sets current cell to visited and gives us the next cell to visit
-    def update(self):
-        self.visited = True
-        if (len(self.randomNextCell)):
-            next = self.randomNextCell.pop()
-            n = self.neighbors[next]
-            print(len(self.neighbors))
-            print(n)
-            if n and not n.visited:
-                n.visited = True
-
-    # Highlights the current cell
     def marker(self):
         x = self.i * length
         y = self.j * length
@@ -89,18 +78,18 @@ class Cell:
 length = 40
 rows = screenWidth // length
 cols = screenHeight // length
-print("Rows = ", rows, "Cols = ", cols)
-
+print(rows, cols)
+# Stack for backtracking
+# stack = []
 # store cells
 grid = [[]*cols]*rows
 for i in range(rows):
     for j in range(cols):
         cell = Cell(i, j)
         grid[i].append(cell)
+current = grid[0][0]
 x = len(grid)
 y = len(grid[i])
-
-current = grid[0][0]
 
 
 def display(surface):
@@ -109,14 +98,18 @@ def display(surface):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
     # Mark first cell as visited
+    current.visited = True
     current.marker()
+    # Push current cell to stack
+    #stack.append(current)
     # Check neighbors of current cell
-    current.countNeighbors(grid)
-    current.update()
-    #if nextCell:
-    #    nextCell.visited = True
-    #    # deleteWall(current, nextCell)
-    #    current = nextCell
+    nextCell = current.countNeighbors(grid)
+    if nextCell:
+        nextCell.visited = True
+        deleteWall(current, nextCell)
+        current = nextCell
+    #elif len(stack) > 0:
+    #    current = stack.pop()
 
 
 def deleteWall(a, b):
