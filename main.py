@@ -15,6 +15,7 @@ Black = (0, 0, 0)
 # TODO: FIX THE COUNTING FUNCTION- MESSES UP THE PATHING
 # TODO: Now finish update function: have it move to the next cell
 
+
 class Cell:
     def __init__(self, i, j):
         self.i = i  # Row
@@ -68,17 +69,21 @@ class Cell:
             self.neighbors.append(grid[self.i][self.j + 1])
 
     # Function sets current cell to visited and gives us the next cell to visit
-    def update(self):
+    def update(self, stack):
         self.visited = True
         if (len(self.randomNextCell)):
+            stack.append(self)
             print(self.randomNextCell)
             next = self.randomNextCell.pop()
             # n is our next cell
             n = self.neighbors[next]
             print("neighbor size is ", len(self.neighbors))
-            print("next is ", next)
+            print("next number is ", next)
+            print("Next cell is ", n)
             if n and not n.visited:
                 n.visited = True
+                stack.append(n)
+            print("Current Cell is ", self)
 
     # Highlights the current cell
     def marker(self):
@@ -103,6 +108,7 @@ x = len(grid)
 y = len(grid[i])
 
 current = grid[0][0]
+stack = []
 
 
 def display(surface):
@@ -112,7 +118,11 @@ def display(surface):
             grid[i][j].draw(surface)
     # current.marker()
     current.countNeighbors(grid)
-    current.update()
+    current.update(stack)
+    if len(stack):
+        stack.pop()
+        print("Stack has :", stack)
+
     # if nextCell:
     #    nextCell.visited = True
     #    # deleteWall(current, nextCell)
