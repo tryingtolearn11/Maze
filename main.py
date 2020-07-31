@@ -48,25 +48,29 @@ class Cell:
         self.changed = False
 
     # Function adds the Unvisited to the 2D array
-    def countNeighbors(self, grid):
+    def countNeighbors(self):
         global x, y
         self.neighbors = []
-        if self.i == 0:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i - 1][self.j])
-        if self.i == x - 1:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i + 1][self.j])
+        # Top
         if self.j == 0:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i][self.j - 1])
+        # Right
+        if self.i == x - 1:
+            self.neighbors.append(None)
+        else:
+            self.neighbors.append(grid[self.i + 1][self.j])
+        # Bottom
         if self.j == y - 1:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i][self.j + 1])
+        # Left
+        if self.i == 0:
+            self.neighbors.append(None)
+        else:
+            self.neighbors.append(grid[self.i - 1][self.j])
 
     # Function sets current cell to visited and gives us the next cell to visit
     def update(self):
@@ -106,6 +110,10 @@ x = len(grid)
 y = len(grid[i])
 
 current = grid[0][0]
+print("Current cell is ", grid[0][0])
+print("right is : ", grid[0][1])
+print("bottom is : ", grid[1][0])
+
 stack = []
 
 
@@ -115,20 +123,23 @@ def display(surface):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
 
-    for cols in grid:
-        for cell in cols:
-            cell.countNeighbors(grid)
+    #for cols in grid:
+    #    for cell in cols:
+    #        cell.countNeighbors(grid)
+    current.countNeighbors()
+    print("neighbor array :", current.neighbors)
     current.visited = True
-    if len(current.randomNextCell):
-        ext = current.randomNextCell.pop()
-        m = current.neighbors[ext]
-        if m and not m.visited:
-            print("Current cell = ", current)
-            print("next cell = ", m)
-            m.visited = True
-            current = m
-
-    #current.update()
+    current.marker()
+    #if len(current.randomNextCell):
+        #print("neighbor array :", current.neighbors)
+        #print(current.randomNextCell)
+        #next = current.randomNextCell.pop()
+        #m = current.neighbors[next]
+        #if m and not m.visited:
+        #    print("Current cell = ", current)
+        #    print("next cell = ", m)
+        #    m.visited = True
+        #    current = m
 
 
 def deleteWall(a, b):
