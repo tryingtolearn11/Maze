@@ -13,7 +13,6 @@ White = (255, 255, 255)
 Black = (0, 0, 0)
 
 # TODO: FIX THE COUNTING FUNCTION- MESSES UP THE PATHING
-# TODO: Now finish update function: have it move to the next cell
 
 
 class Cell:
@@ -49,6 +48,7 @@ class Cell:
 
     # Function adds the Unvisited to the 2D array
     def countNeighbors(self, grid):
+        global x, y
         self.neighbors = []
         # Top
         if self.j == 0:
@@ -56,12 +56,12 @@ class Cell:
         else:
             self.neighbors.append(grid[self.i][self.j - 1])
         # Right
-        if self.i == len(grid) - 1:
+        if self.i == x - 1:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i + 1][self.j])
         # Bottom
-        if self.j == len(grid[0]) - 1:
+        if self.j == y - 1:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i][self.j + 1])
