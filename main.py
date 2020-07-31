@@ -118,7 +118,17 @@ def display(surface):
     for cols in grid:
         for cell in cols:
             cell.countNeighbors(grid)
-    current.update()
+    current.visited = True
+    if len(current.randomNextCell):
+        ext = current.randomNextCell.pop()
+        m = current.neighbors[ext]
+        if m and not m.visited:
+            print("Current cell = ", current)
+            print("next cell = ", m)
+            m.visited = True
+            current = m
+
+    #current.update()
 
 
 def deleteWall(a, b):
