@@ -69,10 +69,9 @@ class Cell:
             self.neighbors.append(grid[self.i][self.j + 1])
 
     # Function sets current cell to visited and gives us the next cell to visit
-    def update(self, stack):
+    def update(self):
         self.visited = True
         if (len(self.randomNextCell)):
-            stack.append(self)
             print(self.randomNextCell)
             next = self.randomNextCell.pop()
             # n is our next cell
@@ -82,7 +81,6 @@ class Cell:
             print("Next cell is ", n)
             if n and not n.visited:
                 n.visited = True
-                stack.append(n)
             print("Current Cell is ", self)
 
     # Highlights the current cell
@@ -116,17 +114,11 @@ def display(surface):
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
-    # current.marker()
-    current.countNeighbors(grid)
-    current.update(stack)
-    if len(stack):
-        stack.pop()
-        print("Stack has :", stack)
 
-    # if nextCell:
-    #    nextCell.visited = True
-    #    # deleteWall(current, nextCell)
-    #    current = nextCell
+    for cols in grid:
+        for cell in cols:
+            cell.countNeighbors(grid)
+    current.update()
 
 
 def deleteWall(a, b):
