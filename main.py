@@ -48,8 +48,7 @@ class Cell:
         self.changed = False
 
     # Function adds the Unvisited to the 2D array
-    def countNeighbors(self):
-        global x, y
+    def countNeighbors(self, grid):
         self.neighbors = []
         # Top
         if self.j == 0:
@@ -57,12 +56,12 @@ class Cell:
         else:
             self.neighbors.append(grid[self.i][self.j - 1])
         # Right
-        if self.i == x - 1:
+        if self.i == len(grid) - 1:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i + 1][self.j])
         # Bottom
-        if self.j == y - 1:
+        if self.j == len(grid[0]) - 1:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i][self.j + 1])
@@ -71,21 +70,6 @@ class Cell:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i - 1][self.j])
-
-    # Function sets current cell to visited and gives us the next cell to visit
-    def update(self):
-        self.visited = True
-        if (len(self.randomNextCell)):
-            print(self.randomNextCell)
-            next = self.randomNextCell.pop()
-            # n is our next cell
-            n = self.neighbors[next]
-            print("neighbor size is ", len(self.neighbors))
-            print("next number is ", next)
-            print("Next cell is ", n)
-            if n and not n.visited:
-                n.visited = True
-            print("Current Cell is ", self)
 
     # Highlights the current cell
     def marker(self):
@@ -110,9 +94,9 @@ x = len(grid)
 y = len(grid[i])
 
 current = grid[0][0]
-print("Current cell is ", grid[0][0])
+print("Current cell :", current)
 print("right is : ", grid[0][1])
-print("bottom is : ", grid[1][0])
+print("BOTTOM is : ", grid[1][0])
 
 stack = []
 
@@ -123,23 +107,15 @@ def display(surface):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
 
-    #for cols in grid:
-    #    for cell in cols:
-    #        cell.countNeighbors(grid)
-    current.countNeighbors()
-    print("neighbor array :", current.neighbors)
+    current.countNeighbors(grid)
     current.visited = True
     current.marker()
-    #if len(current.randomNextCell):
-        #print("neighbor array :", current.neighbors)
-        #print(current.randomNextCell)
-        #next = current.randomNextCell.pop()
-        #m = current.neighbors[next]
-        #if m and not m.visited:
-        #    print("Current cell = ", current)
-        #    print("next cell = ", m)
-        #    m.visited = True
-        #    current = m
+    next = random.choice(current.neighbors)
+    if next and not next.visited:
+        print("next :", next)
+        print("neighbor array :", current.neighbors)
+        next.visited = True
+        current = next
 
 
 def deleteWall(a, b):
