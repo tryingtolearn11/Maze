@@ -3,7 +3,7 @@ import random
 pygame.init()
 screenWidth = 604
 screenHeight = 604
-FPS = 20
+FPS = 60
 
 # Colors
 Red = (255, 0, 0)
@@ -23,16 +23,13 @@ class Cell:
         # Checks to see if wall(s) of the cell exists
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
-        self.randomNextCell = [0, 1, 2, 3]
-        random.shuffle(self.randomNextCell)
 
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
-        # Our Path in Green
         if self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
-        # Top Line                             Start Pos,  End Pos
+        # Top Line
         if self.wall[0]:
             pygame.draw.line(displayWindow, White, (x, y), (x + length, y), 1)
         # Right Line
@@ -44,13 +41,13 @@ class Cell:
         # Left
         if self.wall[3]:
             pygame.draw.line(displayWindow, White, (x, y + length), (x, y), 1)
-        self.changed = False
 
-    # Function adds the Unvisited to the 2D array
+    # Function adds the Unvisited to the 2D array and returns the next cell
     def countNeighbors(self, grid):
         global x, y
         self.neighbors = []
-        # Top
+        # Edge Cases
+        # Top Cell
         if self.j == 0:
             self.neighbors.append(None)
         else:
@@ -71,7 +68,6 @@ class Cell:
         else:
             self.neighbors.append(grid[self.i - 1][self.j])
 
-    # Highlights the current cell
     def marker(self):
         x = self.i * length
         y = self.j * length
@@ -82,23 +78,21 @@ class Cell:
 length = 40
 rows = screenWidth // length
 cols = screenHeight // length
-print("Rows = ", rows, "Cols = ", cols)
 
-# store cells
-grid = [[]*cols]*rows
+
+# store cells in the grid
+grid = []
 for i in range(rows):
+    column = []
     for j in range(cols):
         cell = Cell(i, j)
-        grid[i].append(cell)
+        column.append(cell)
+    grid.append(column)
+
+
+current = grid[1][1]
 x = len(grid)
 y = len(grid[i])
-
-current = grid[0][0]
-print("Current cell :", current)
-print("right is : ", grid[0][1])
-print("BOTTOM is : ", grid[1][0])
-
-stack = []
 
 
 def display(surface):
@@ -106,15 +100,14 @@ def display(surface):
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
+            grid[i][j].countNeighbors(grid)
 
-    current.countNeighbors(grid)
     current.visited = True
     current.marker()
     next = random.choice(current.neighbors)
     if next and not next.visited:
-        print("next :", next)
-        print("neighbor array :", current.neighbors)
         next.visited = True
+        deleteWall(current, next)
         current = next
 
 
