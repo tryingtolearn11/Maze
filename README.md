@@ -1,6 +1,6 @@
 # Maze
 
-Maze Generation using Recursive Backtracking:
+Maze Generation using Recursive Backtracking and Pygame
 
 [Source](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
 
