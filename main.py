@@ -79,6 +79,8 @@ length = 40
 rows = screenWidth // length
 cols = screenHeight // length
 
+# Add cells to stack
+stack = []
 
 # store cells in the grid
 grid = []
@@ -90,7 +92,8 @@ for i in range(rows):
     grid.append(column)
 
 
-current = grid[1][1]
+current = grid[0][0]
+stack.append(current)
 x = len(grid)
 y = len(grid[i])
 
@@ -105,8 +108,11 @@ def display(surface):
     current.visited = True
     current.marker()
     next = random.choice(current.neighbors)
+    if len(stack):
+        current = stack.pop()
     if next and not next.visited:
         next.visited = True
+        stack.append(current)
         deleteWall(current, next)
         current = next
 
