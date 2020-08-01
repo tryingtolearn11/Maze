@@ -96,7 +96,6 @@ for i in range(rows):
 
 
 current = grid[0][0]
-
 x = len(grid)
 y = len(grid[i])
 
@@ -150,10 +149,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-        FPSclock.tick(FPS)
-        display(displayWindow)
-        pygame.display.update()
+        keys = pygame.key.get_pressed()
+        if event.type == pygame.KEYDOWN:
+            if keys[pygame.K_SPACE]:
+                display(displayWindow)
+                pygame.display.update()
+    FPSclock.tick(FPS)
 
 
 if __name__ == '__main__':
