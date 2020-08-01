@@ -1,9 +1,9 @@
 import pygame
 import random
 pygame.init()
-screenWidth = 800
-screenHeight = 800
-FPS = 30
+screenWidth = 1000
+screenHeight = 1000
+FPS = 60
 
 # Colors
 Red = (255, 0, 0)
@@ -68,8 +68,8 @@ class Cell:
 
         if len(self.neighbors):
             r = random.choice(self.neighbors)
-            if r is not None:
-                return r
+            # if r is not None:
+            return r
 
     def marker(self):
         x = self.i * length
