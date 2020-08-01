@@ -46,28 +46,27 @@ class Cell:
     def countNeighbors(self, grid):
         global x, y
         self.neighbors = []
-
         # Edge Cases
-        if self.i == 0:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i - 1][self.j])
-        if self.i == x - 1:
-            self.neighbors.append(None)
-        else:
-            self.neighbors.append(grid[self.i + 1][self.j])
+        # Top Cell
         if self.j == 0:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i][self.j - 1])
+        # Right
+        if self.i == x - 1:
+            self.neighbors.append(None)
+        else:
+            self.neighbors.append(grid[self.i + 1][self.j])
+        # Bottom
         if self.j == y - 1:
             self.neighbors.append(None)
         else:
             self.neighbors.append(grid[self.i][self.j + 1])
-        # pick random unvisted cell as our next
-        if len(self.neighbors):
-            r = random.choice(self.neighbors)
-            return r
+        # Left
+        if self.i == 0:
+            self.neighbors.append(None)
+        else:
+            self.neighbors.append(grid[self.i - 1][self.j])
 
     def marker(self):
         x = self.i * length
@@ -79,15 +78,19 @@ class Cell:
 length = 40
 rows = screenWidth // length
 cols = screenHeight // length
-print(rows, cols)
+
 
 # store cells in the grid
-grid = [[]*cols]*rows
+grid = []
 for i in range(rows):
+    column = []
     for j in range(cols):
         cell = Cell(i, j)
-        grid[i].append(cell)
-current = grid[0][0]
+        column.append(cell)
+    grid.append(column)
+
+
+current = grid[1][1]
 x = len(grid)
 y = len(grid[i])
 
@@ -97,15 +100,15 @@ def display(surface):
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
-    # Mark first cell as visited
+            grid[i][j].countNeighbors(grid)
+
     current.visited = True
     current.marker()
-    # Check neighbors of current cell
-    nextCell = current.countNeighbors(grid)
-    if nextCell:
-        nextCell.visited = True
-        deleteWall(current, nextCell)
-        current = nextCell
+    next = random.choice(current.neighbors)
+    if next and not next.visited:
+        next.visited = True
+        deleteWall(current, next)
+        current = next
 
 
 def deleteWall(a, b):
