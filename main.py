@@ -67,8 +67,8 @@ class Cell:
             self.neighbors.append(grid[self.i - 1][self.j])
 
         if len(self.neighbors):
-            r = random.choice(self.neighbors)
-            return r
+            r = random.randrange(len(self.neighbors))
+            return self.neighbors[r]
 
     def marker(self):
         x = self.i * length
