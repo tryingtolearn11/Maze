@@ -1,8 +1,8 @@
 import pygame
 import random
 pygame.init()
-screenWidth = 604
-screenHeight = 604
+screenWidth = 1000
+screenHeight = 1000
 FPS = 60
 
 # Colors
@@ -11,8 +11,6 @@ Blue = (0, 100, 200, 50)
 Green = (0, 200, 100, 50)
 White = (255, 255, 255)
 Black = (0, 0, 0)
-
-# TODO: FIX THE COUNTING FUNCTION- MESSES UP THE PATHING
 
 
 class Cell:
@@ -43,30 +41,35 @@ class Cell:
             pygame.draw.line(displayWindow, White, (x, y + length), (x, y), 1)
 
     # Function adds the Unvisited to the 2D array and returns the next cell
-    def countNeighbors(self, grid):
+    def countNeighbors(self):
         global x, y
         self.neighbors = []
-        # Edge Cases
+
         # Top Cell
         if self.j == 0:
             self.neighbors.append(None)
-        else:
+        elif not grid[self.i][self.j - 1].visited:
             self.neighbors.append(grid[self.i][self.j - 1])
         # Right
         if self.i == x - 1:
             self.neighbors.append(None)
-        else:
+        elif not grid[self.i + 1][self.j].visited:
             self.neighbors.append(grid[self.i + 1][self.j])
         # Bottom
         if self.j == y - 1:
             self.neighbors.append(None)
-        else:
+        elif not grid[self.i][self.j + 1].visited:
             self.neighbors.append(grid[self.i][self.j + 1])
         # Left
         if self.i == 0:
             self.neighbors.append(None)
-        else:
+        elif not grid[self.i - 1][self.j].visited:
             self.neighbors.append(grid[self.i - 1][self.j])
+
+        if len(self.neighbors):
+            r = random.choice(self.neighbors)
+            # if r is not None:
+            return r
 
     def marker(self):
         x = self.i * length
@@ -79,6 +82,8 @@ length = 40
 rows = screenWidth // length
 cols = screenHeight // length
 
+# Add cells to stack
+stack = []
 
 # store cells in the grid
 grid = []
@@ -90,7 +95,8 @@ for i in range(rows):
     grid.append(column)
 
 
-current = grid[1][1]
+current = grid[0][0]
+
 x = len(grid)
 y = len(grid[i])
 
@@ -100,15 +106,17 @@ def display(surface):
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
-            grid[i][j].countNeighbors(grid)
 
     current.visited = True
     current.marker()
-    next = random.choice(current.neighbors)
-    if next and not next.visited:
-        next.visited = True
+    next = current.countNeighbors()
+    if next:
+        stack.append(current)
         deleteWall(current, next)
+        next.visited = True
         current = next
+    elif len(stack) > 0:
+        current = stack.pop()
 
 
 def deleteWall(a, b):
