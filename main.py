@@ -1,8 +1,8 @@
 import pygame
 import random
 pygame.init()
-screenWidth = 604
-screenHeight = 604
+screenWidth = 800
+screenHeight = 800
 FPS = 30
 
 # Colors
@@ -41,34 +41,30 @@ class Cell:
             pygame.draw.line(displayWindow, White, (x, y + length), (x, y), 1)
 
     # Function adds the Unvisited to the 2D array and returns the next cell
-    def countNeighbors(self, grid):
+    def countNeighbors(self):
         global x, y
         self.neighbors = []
-        # Edge Cases
+
         # Top Cell
         if self.j == 0:
             self.neighbors.append(None)
-        else:
-            if not grid[self.i][self.j - 1].visited:
-                self.neighbors.append(grid[self.i][self.j - 1])
+        elif not grid[self.i][self.j - 1].visited:
+            self.neighbors.append(grid[self.i][self.j - 1])
         # Right
         if self.i == x - 1:
             self.neighbors.append(None)
-        else:
-            if not grid[self.i + 1][self.j].visited:
-                self.neighbors.append(grid[self.i + 1][self.j])
+        elif not grid[self.i + 1][self.j].visited:
+            self.neighbors.append(grid[self.i + 1][self.j])
         # Bottom
         if self.j == y - 1:
             self.neighbors.append(None)
-        else:
-            if not grid[self.i][self.j + 1].visited:
-                self.neighbors.append(grid[self.i][self.j + 1])
+        elif not grid[self.i][self.j + 1].visited:
+            self.neighbors.append(grid[self.i][self.j + 1])
         # Left
         if self.i == 0:
             self.neighbors.append(None)
-        else:
-            if not grid[self.i - 1][self.j].visited:
-                self.neighbors.append(grid[self.i - 1][self.j])
+        elif not grid[self.i - 1][self.j].visited:
+            self.neighbors.append(grid[self.i - 1][self.j])
 
         if len(self.neighbors):
             r = random.choice(self.neighbors)
@@ -112,8 +108,8 @@ def display(surface):
 
     current.visited = True
     current.marker()
-    next = current.countNeighbors(grid)
-    if next and not next.visited:
+    next = current.countNeighbors()
+    if next:
         stack.append(current)
         deleteWall(current, next)
         next.visited = True
