@@ -1,8 +1,8 @@
 import pygame
 import random
 pygame.init()
-screenWidth = 1000
-screenHeight = 1000
+screenWidth = 800
+screenHeight = 800
 FPS = 60
 
 # Colors
@@ -66,10 +66,10 @@ class Cell:
         elif not grid[self.i - 1][self.j].visited:
             self.neighbors.append(grid[self.i - 1][self.j])
 
-        if len(self.neighbors):
-            r = random.choice(self.neighbors)
+        #if len(self.neighbors):
+            #r = random.choice(self.neighbors)
             # if r is not None:
-            return r
+            #return r
 
     def marker(self):
         x = self.i * length
@@ -108,7 +108,16 @@ def display(surface):
 
     current.visited = True
     current.marker()
-    next = current.countNeighbors()
+    for i in range(x):
+        for j in range(y):
+            grid[i][j].countNeighbors()
+
+    if len(current.neighbors):
+        r = random.randrange(len(current.neighbors))
+        next = current.neighbors[r]
+    else:
+        next = None
+    #next = current.countNeighbors()
     if next:
         stack.append(current)
         deleteWall(current, next)
