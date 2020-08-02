@@ -170,15 +170,19 @@ pygame.display.set_caption("Maze Generator")
 def main():
     global FPS
     FPSclock = pygame.time.Clock()
+    start = False
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-        FPSclock.tick(FPS)
-        display(displayWindow)
-        pygame.display.update()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    start = True
+        if(start):
+            display(displayWindow)
+            pygame.display.update()
+            FPSclock.tick(FPS)
 
 
 if __name__ == '__main__':
