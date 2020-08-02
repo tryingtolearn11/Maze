@@ -1,9 +1,9 @@
 import pygame
 import random
 pygame.init()
-screenWidth = 1000
-screenHeight = 1000
-FPS = 30
+screenWidth = 800
+screenHeight = 800
+FPS = 60
 
 # Colors
 Red = (255, 0, 0)
@@ -18,7 +18,6 @@ class Cell:
         self.i = i  # Row
         self.j = j  # Column
         self.visited = False
-        # Checks to see if wall(s) of the cell exists
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
 
@@ -91,10 +90,6 @@ cols = borderHeight // length
 # Add cells to stack
 stack = []
 
-xmargin = int((screenWidth - (length * rows + (cols - 1))) / 2)
-ymargin = int((screenHeight - (length * cols + (rows - 1))) / 2)
-print(xmargin)
-print(ymargin)
 # store cells in the grid
 grid = []
 for i in range(rows):
@@ -111,23 +106,11 @@ x = len(grid)
 y = len(grid[i])
 
 
-def leftTopofTile(a, b):
-    left = xmargin + (a * length) + (a - 1)
-    top = ymargin + (b * length) + (b - 1)
-    return (left, top)
-
-
 def display(surface):
     global current
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
-
-    # Drawing the border
-    left, top = leftTopofTile(0, 0)
-    width = cols * length
-    height = rows * length
-    pygame.draw.rect(displayWindow, Red, (left - 5, top - 5, width + 11, height + 11), 4)
 
     current.visited = True
     current.marker()
