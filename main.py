@@ -3,7 +3,7 @@ import random
 pygame.init()
 screenWidth = 1000
 screenHeight = 1000
-FPS = 30
+FPS = 50
 
 # Colors
 Red = (255, 0, 0)
@@ -21,12 +21,14 @@ class Cell:
         # Checks to see if wall(s) of the cell exists
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
+        self.backtrackPathColor = False
 
     def draw(self, surface):
         x = self.i * length + xmargin
         y = self.j * length + ymargin
-        self.left, self.top = leftTopofTile(0, 0)
-        if self.visited:
+        if self.backtrackPathColor:
+            pygame.draw.rect(displayWindow, Black, (x, y, length, length))
+        elif self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
         # Top Line
         if self.wall[0]:
@@ -127,7 +129,7 @@ def display(surface):
     left, top = leftTopofTile(0, 0)
     width = cols * length
     height = rows * length
-    pygame.draw.rect(displayWindow, White, (left - 5, top - 5, width + 11, height + 11), 1)
+    pygame.draw.rect(displayWindow, Blue, (left - 3, top - 3, width + 9, height + 9), 5)
 
     current.visited = True
     current.marker()
@@ -138,6 +140,7 @@ def display(surface):
         next.visited = True
         current = next
     elif len(stack):
+        current.backtrackPathColor = True
         current = stack.pop()
 
 
