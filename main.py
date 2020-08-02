@@ -134,8 +134,13 @@ def display(surface):
     pygame.draw.rect(displayWindow, Blue, (left - 3, top - 3, width + 9, height + 9), 5)
     # Draw Buttons
     drawButtons()
-    if start:
+    if START:
         update()
+    elif RESET:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                grid[i][j].draw(surface)
+
 
 def update():
     global current
@@ -183,8 +188,18 @@ def drawButtons():
     displayWindow.blit(START_SURF, START_RECT)
 
 
+def getMouseClick(surface, xpos, ypos):
+    for i in range(x):
+        for j in range(y):
+            left, top = leftTopofTile(xpos, ypos)
+            tileRect = pygame.Rect(left, top, length, length)
+            if tileRect.collidepoint(xpos, ypos):
+                return(xpos, ypos)
+    return (None, None)
+
+
 def main():
-    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT, start
+    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT, START, RESET
     FPSclock = pygame.time.Clock()
     displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
     pygame.display.set_caption("Maze Generator")
@@ -192,7 +207,8 @@ def main():
     RESET_SURF, RESET_RECT = makeTextBox('Reset', Black, White, screenWidth - 150, screenHeight - 90)
     START_SURF, START_RECT = makeTextBox('Start', White, Black, screenWidth - 910, screenHeight - 90)
 
-    start = False
+    START = False
+    RESET = False
     running = True
 
     while running:
@@ -201,7 +217,14 @@ def main():
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    start = True
+                    START = True
+            if event.type == pygame.MOUSEBUTTONUP:
+                x_spot, y_spot = getMouseClick(displayWindow, event.pos[0], event.pos[1])
+                if (x_spot, y_spot) == (None, None):
+                    if START_RECT.collidepoint(event.pos):
+                        START = True
+                    elif RESET_RECT.collidepoint(event.pos):
+                        RESET = True
 
         display(displayWindow)
         pygame.display.update()
