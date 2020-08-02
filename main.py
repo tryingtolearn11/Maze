@@ -1,9 +1,9 @@
 import pygame
 import random
 pygame.init()
-screenWidth = 800
-screenHeight = 800
-FPS = 60
+screenWidth = 1000
+screenHeight = 1000
+FPS = 30
 
 # Colors
 Red = (255, 0, 0)
@@ -60,10 +60,7 @@ class Cell:
             left = grid[self.i - 1][self.j]
         else:
             left = None
-        #top = grid[(((self.i + 1) + x) % x)][self.j]
-        #right = grid[self.i][(((self.j + 1) + y) % y)]
-        #bottom = grid[(((self.i - 1) + x) % x)][self.j]
-        #left = grid[self.i][(((self.j - 1) + y) % y)]
+
         # If the neighbor cell is unvisited add to array
         if top and not top.visited:
             self.neighbors.append(top)
@@ -86,12 +83,18 @@ class Cell:
 
 # Rows and Columns, length will be our width of each cell
 length = 40
-rows = screenWidth // length
-cols = screenHeight // length
+borderWidth = 800
+borderHeight = 800
+rows = borderWidth // length
+cols = borderHeight // length
 
 # Add cells to stack
 stack = []
 
+xmargin = int((screenWidth - (length * rows + (cols - 1))) / 2)
+ymargin = int((screenHeight - (length * cols + (rows - 1))) / 2)
+print(xmargin)
+print(ymargin)
 # store cells in the grid
 grid = []
 for i in range(rows):
@@ -108,11 +111,23 @@ x = len(grid)
 y = len(grid[i])
 
 
+def leftTopofTile(a, b):
+    left = xmargin + (a * length) + (a - 1)
+    top = ymargin + (b * length) + (b - 1)
+    return (left, top)
+
+
 def display(surface):
     global current
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             grid[i][j].draw(surface)
+
+    # Drawing the border
+    left, top = leftTopofTile(0, 0)
+    width = cols * length
+    height = rows * length
+    pygame.draw.rect(displayWindow, Red, (left - 5, top - 5, width + 11, height + 11), 4)
 
     current.visited = True
     current.marker()
