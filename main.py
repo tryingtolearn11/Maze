@@ -83,7 +83,10 @@ class Cell:
     def marker(self):
         x = self.i * length + xmargin
         y = self.j * length + ymargin
-        pygame.draw.rect(displayWindow, Blue, (x, y, length, length))
+        if self.i == 0 and self.j == 0:
+            pygame.draw.rect(displayWindow, Black, (x, y, length, length))
+        else:
+            pygame.draw.rect(displayWindow, Blue, (x, y, length, length))
 
 
 # Rows and Columns, length will be our width of each cell
@@ -131,7 +134,7 @@ def display(surface):
     left, top = leftTopofTile(0, 0)
     width = cols * length
     height = rows * length
-    pygame.draw.rect(displayWindow, Blue, (left - 3, top - 3, width + 9, height + 9), 5)
+    pygame.draw.rect(displayWindow, Blue, (left - 3, top - 3, width + 10, height + 10), 5)
     # Draw Buttons
     drawButtons()
     if START:
