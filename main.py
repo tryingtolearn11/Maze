@@ -3,7 +3,7 @@ import random
 pygame.init()
 screenWidth = 800
 screenHeight = 800
-FPS = 5
+FPS = 60
 
 # Colors
 Red = (255, 0, 0)
@@ -44,11 +44,26 @@ class Cell:
     def countNeighbors(self, grid):
         global x, y
         self.neighbors = []
-        top = grid[(((self.i + 1) + x) % x)][self.j]
-        right = grid[self.i][(((self.j + 1) + y) % y)]
-        bottom = grid[(((self.i - 1) + x) % x)][self.j]
-        left = grid[self.i][(((self.j - 1) + y) % y)]
-
+        if self.j > 0:
+            top = grid[self.i][self.j - 1]
+        else:
+            top = None
+        if self.i < x - 1:
+            right = grid[self.i + 1][self.j]
+        else:
+            right = None
+        if self.j < y - 1:
+            bottom = grid[self.i][self.j + 1]
+        else:
+            bottom = None
+        if self.i > 0:
+            left = grid[self.i - 1][self.j]
+        else:
+            left = None
+        #top = grid[(((self.i + 1) + x) % x)][self.j]
+        #right = grid[self.i][(((self.j + 1) + y) % y)]
+        #bottom = grid[(((self.i - 1) + x) % x)][self.j]
+        #left = grid[self.i][(((self.j - 1) + y) % y)]
         # If the neighbor cell is unvisited add to array
         if top and not top.visited:
             self.neighbors.append(top)
