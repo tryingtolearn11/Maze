@@ -1,6 +1,5 @@
 import pygame
 import random
-pygame.init()
 screenWidth = 800
 screenHeight = 800
 FPS = 50
@@ -25,6 +24,7 @@ class Cell:
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
+
         if self.backtrackPathColor:
             pygame.draw.rect(displayWindow, Black, (x, y, length, length))
         elif self.visited:
@@ -153,6 +153,7 @@ pygame.display.set_caption("Maze Generator")
 
 def main():
     global FPS
+    pygame.init()
     FPSclock = pygame.time.Clock()
     start = False
     running = True
