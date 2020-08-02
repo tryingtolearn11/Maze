@@ -23,8 +23,8 @@ class Cell:
         self.wall = [True, True, True, True]
 
     def draw(self, surface):
-        x = self.i * length
-        y = self.j * length
+        x = self.i * length + xmargin
+        y = self.j * length + ymargin
         self.left, self.top = leftTopofTile(0, 0)
         if self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
@@ -77,8 +77,8 @@ class Cell:
             return self.neighbors[p]
 
     def marker(self):
-        x = self.i * length
-        y = self.j * length
+        x = self.i * length + xmargin
+        y = self.j * length + ymargin
         pygame.draw.rect(displayWindow, Blue, (x, y, length, length))
 
 
@@ -127,7 +127,7 @@ def display(surface):
     left, top = leftTopofTile(0, 0)
     width = cols * length
     height = rows * length
-    pygame.draw.rect(displayWindow, Red, (left - 5, top - 5, width + 11, height + 11), 5)
+    pygame.draw.rect(displayWindow, White, (left - 5, top - 5, width + 11, height + 11), 1)
 
     current.visited = True
     current.marker()
