@@ -134,6 +134,11 @@ def display(surface):
     pygame.draw.rect(displayWindow, Blue, (left - 3, top - 3, width + 9, height + 9), 5)
     # Draw Buttons
     drawButtons()
+    if start:
+        update()
+
+def update():
+    global current
     current.visited = True
     current.marker()
     next = current.countNeighbors(grid)
@@ -175,15 +180,18 @@ def makeTextBox(text, color, bgcolor, top, left):
 
 def drawButtons():
     displayWindow.blit(RESET_SURF, RESET_RECT)
+    displayWindow.blit(START_SURF, START_RECT)
 
 
 def main():
-    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT
+    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT, start
     FPSclock = pygame.time.Clock()
     displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
     pygame.display.set_caption("Maze Generator")
     BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
-    RESET_SURF, RESET_RECT = makeTextBox('Reset', Black, White, screenWidth - 120, screenHeight - 90)
+    RESET_SURF, RESET_RECT = makeTextBox('Reset', Black, White, screenWidth - 150, screenHeight - 90)
+    START_SURF, START_RECT = makeTextBox('Start', White, Black, screenWidth - 910, screenHeight - 90)
+
     start = False
     running = True
 
@@ -195,10 +203,9 @@ def main():
                 if event.key == pygame.K_SPACE:
                     start = True
 
-        if(start):
-            display(displayWindow)
-            pygame.display.update()
-            FPSclock.tick(FPS)
+        display(displayWindow)
+        pygame.display.update()
+        FPSclock.tick(FPS)
         displayWindow.fill(bgcolor)
 
 
