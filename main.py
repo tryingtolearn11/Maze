@@ -1,10 +1,10 @@
 import pygame
 import random
-pygame.init()
 screenWidth = 1000
 screenHeight = 1000
-FPS = 50
+FPS = 60
 
+# TODO: WRITE A RESET FUNCTION
 # Colors
 Red = (255, 0, 0)
 Blue = (0, 100, 200, 50)
@@ -108,7 +108,7 @@ for i in range(rows):
         column.append(cell)
     grid.append(column)
 
-
+newgrid = grid[:]
 current = grid[0][0]
 
 x = len(grid)
@@ -136,10 +136,6 @@ def display(surface):
     drawButtons()
     if START:
         update()
-    elif RESET:
-        for i in range(len(grid)):
-            for j in range(len(grid[i])):
-                grid[i][j].draw(surface)
 
 
 def update():
@@ -199,7 +195,8 @@ def getMouseClick(surface, xpos, ypos):
 
 
 def main():
-    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT, START, RESET
+    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT, START
+    pygame.init()
     FPSclock = pygame.time.Clock()
     displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
     pygame.display.set_caption("Maze Generator")
@@ -208,7 +205,6 @@ def main():
     START_SURF, START_RECT = makeTextBox('Start', White, Black, screenWidth - 910, screenHeight - 90)
 
     START = False
-    RESET = False
     running = True
 
     while running:
@@ -223,8 +219,6 @@ def main():
                 if (x_spot, y_spot) == (None, None):
                     if START_RECT.collidepoint(event.pos):
                         START = True
-                    elif RESET_RECT.collidepoint(event.pos):
-                        RESET = True
 
         display(displayWindow)
         pygame.display.update()
