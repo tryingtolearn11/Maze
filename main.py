@@ -3,7 +3,7 @@ import random
 pygame.init()
 screenWidth = 800
 screenHeight = 800
-FPS = 60
+FPS = 50
 
 # Colors
 Red = (255, 0, 0)
@@ -20,11 +20,14 @@ class Cell:
         self.visited = False
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
+        self.backtrackPathColor = False
 
     def draw(self, surface):
         x = self.i * length
         y = self.j * length
-        if self.visited:
+        if self.backtrackPathColor:
+            pygame.draw.rect(displayWindow, Black, (x, y, length, length))
+        elif self.visited:
             pygame.draw.rect(displayWindow, Green, (x, y, length, length))
         # Top Line
         if self.wall[0]:
@@ -121,6 +124,7 @@ def display(surface):
         next.visited = True
         current = next
     elif len(stack):
+        current.backtrackPathColor = True
         current = stack.pop()
 
 
