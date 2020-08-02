@@ -11,6 +11,8 @@ Blue = (0, 100, 200, 50)
 Green = (0, 200, 100, 50)
 White = (255, 255, 255)
 Black = (0, 0, 0)
+bgcolor = (5, 55, 75)
+BASICFONTSIZE = 18
 
 
 class Cell:
@@ -130,7 +132,8 @@ def display(surface):
     width = cols * length
     height = rows * length
     pygame.draw.rect(displayWindow, Blue, (left - 3, top - 3, width + 9, height + 9), 5)
-
+    # Draw Buttons
+    drawButtons()
     current.visited = True
     current.marker()
     next = current.countNeighbors(grid)
@@ -163,15 +166,27 @@ def deleteWall(a, b):
         b.wall[0] = False
 
 
-displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
-pygame.display.set_caption("Maze Generator")
+def makeTextBox(text, color, bgcolor, top, left):
+    textSurface = BASICFONT.render(text, True, color, bgcolor)
+    textRect = textSurface.get_rect()
+    textRect.topleft = (top, left)
+    return (textSurface, textRect)
+
+
+def drawButtons():
+    displayWindow.blit(RESET_SURF, RESET_RECT)
 
 
 def main():
-    global FPS
+    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT
     FPSclock = pygame.time.Clock()
+    displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
+    pygame.display.set_caption("Maze Generator")
+    BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
+    RESET_SURF, RESET_RECT = makeTextBox('Reset', Black, White, screenWidth - 120, screenHeight - 90)
     start = False
     running = True
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -179,10 +194,12 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     start = True
+
         if(start):
             display(displayWindow)
             pygame.display.update()
             FPSclock.tick(FPS)
+        displayWindow.fill(bgcolor)
 
 
 if __name__ == '__main__':
