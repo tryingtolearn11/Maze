@@ -6,7 +6,7 @@ FPS = 60
 
 # TODO: WRITE A RESET FUNCTION
 # Colors
-Red = (255, 0, 0)
+Red = (200, 5, 50, 50)
 Blue = (0, 100, 200, 50)
 Green = (0, 200, 100, 50)
 White = (255, 255, 255)
@@ -88,6 +88,13 @@ class Cell:
         else:
             pygame.draw.rect(displayWindow, Blue, (x, y, length, length))
 
+    def resetCells(self):
+        self.visited = False
+        self.wall = [True, True, True, True]
+        self.backtrackPathColor = False
+        if len(self.neighbors):
+            self.neighbors.clear()
+
 
 # Rows and Columns, length will be our width of each cell
 length = 40
@@ -111,7 +118,6 @@ for i in range(rows):
         column.append(cell)
     grid.append(column)
 
-newgrid = grid[:]
 current = grid[0][0]
 
 x = len(grid)
@@ -154,6 +160,12 @@ def update():
     elif len(stack):
         current.backtrackPathColor = True
         current = stack.pop()
+
+
+def reset(surface):
+    for i in range(x):
+        for j in range(y):
+            grid[i][j].resetCells()
 
 
 def deleteWall(a, b):
@@ -222,6 +234,8 @@ def main():
                 if (x_spot, y_spot) == (None, None):
                     if START_RECT.collidepoint(event.pos):
                         START = True
+                    if RESET_RECT.collidepoint(event.pos):
+                        reset(displayWindow)
 
         display(displayWindow)
         pygame.display.update()
