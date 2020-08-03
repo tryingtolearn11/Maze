@@ -90,8 +90,6 @@ class Cell:
         self.visited = False
         self.wall = [True, True, True, True]
         self.backtrackPathColor = False
-        if len(self.neighbors):
-            self.neighbors.clear()
 
 
 # Rows and Columns
@@ -237,6 +235,7 @@ def main():
                     if START_RECT.collidepoint(event.pos):
                         START = True
                     if RESET_RECT.collidepoint(event.pos):
+                        START = False
                         pygame.time.wait(500)
                         reset(displayWindow)
 
