@@ -199,7 +199,6 @@ def drawButtons():
     displayWindow.blit(START_SURF, START_RECT)
 
 
-
 def getMouseClick(surface, xpos, ypos):
     for i in range(x):
         for j in range(y):
