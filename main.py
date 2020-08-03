@@ -4,7 +4,7 @@ screenWidth = 1000
 screenHeight = 1000
 FPS = 40
 
-# TODO: WRITE A RESET FUNCTION
+
 # TODO: IMPLEMENT A* Pathfinding Algorithm
 # Colors
 Red = (200, 5, 50, 50)
@@ -100,6 +100,7 @@ borderWidth = 800
 borderHeight = 800
 rows = borderWidth // length
 cols = borderHeight // length
+print(rows, cols)
 
 # Add cells to stack
 stack = []
@@ -107,7 +108,7 @@ stack = []
 xmargin = int((screenWidth - (length * rows + (cols - 1))) / 2)
 ymargin = int((screenHeight - (length * cols + (rows - 1))) / 2)
 
-# store cells in the grid
+# store cells
 grid = []
 for i in range(rows):
     column = []
@@ -216,7 +217,7 @@ def main():
     FPSclock = pygame.time.Clock()
     displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
     pygame.display.set_caption("Maze Generator")
-    BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
+    BASICFONT = pygame.font.SysFont('arial', BASICFONTSIZE)
     RESET_SURF, RESET_RECT = makeTextBox('Reset', White, Black, screenWidth - 150, screenHeight - 90)
     START_SURF, START_RECT = makeTextBox('Start', White, Black, screenWidth - 910, screenHeight - 90)
 
