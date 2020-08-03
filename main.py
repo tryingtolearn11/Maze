@@ -5,6 +5,7 @@ screenHeight = 1000
 FPS = 60
 
 # TODO: WRITE A RESET FUNCTION
+# TODO: IMPLEMENT A* Pathfinding Algorithm
 # Colors
 Red = (200, 5, 50, 50)
 Blue = (0, 100, 200, 50)
