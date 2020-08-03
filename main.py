@@ -199,6 +199,7 @@ def drawButtons():
     displayWindow.blit(START_SURF, START_RECT)
 
 
+
 def getMouseClick(surface, xpos, ypos):
     for i in range(x):
         for j in range(y):
@@ -210,7 +211,7 @@ def getMouseClick(surface, xpos, ypos):
 
 
 def main():
-    global displayWindow, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT, START
+    global displayWindow, START, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT
     pygame.init()
     FPSclock = pygame.time.Clock()
     displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
@@ -218,7 +219,6 @@ def main():
     BASICFONT = pygame.font.SysFont('arial', BASICFONTSIZE)
     RESET_SURF, RESET_RECT = makeTextBox('Reset', White, Black, screenWidth - 150, screenHeight - 90)
     START_SURF, START_RECT = makeTextBox('Start', White, Black, screenWidth - 910, screenHeight - 90)
-
     START = False
     running = True
 
