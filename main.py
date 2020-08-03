@@ -13,7 +13,7 @@ Green = (0, 200, 100, 50)
 White = (255, 255, 255)
 Black = (0, 0, 0)
 bgcolor = (5, 55, 75)
-BASICFONTSIZE = 18
+BASICFONTSIZE = 20
 
 
 class Cell:
@@ -217,7 +217,7 @@ def main():
     displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
     pygame.display.set_caption("Maze Generator")
     BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
-    RESET_SURF, RESET_RECT = makeTextBox('Reset', Black, White, screenWidth - 150, screenHeight - 90)
+    RESET_SURF, RESET_RECT = makeTextBox('Reset', White, Black, screenWidth - 150, screenHeight - 90)
     START_SURF, START_RECT = makeTextBox('Start', White, Black, screenWidth - 910, screenHeight - 90)
 
     START = False
