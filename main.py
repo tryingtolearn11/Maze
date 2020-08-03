@@ -2,7 +2,7 @@ import pygame
 import random
 screenWidth = 1000
 screenHeight = 1000
-FPS = 60
+FPS = 40
 
 # TODO: WRITE A RESET FUNCTION
 # TODO: IMPLEMENT A* Pathfinding Algorithm
@@ -18,10 +18,9 @@ BASICFONTSIZE = 18
 
 class Cell:
     def __init__(self, i, j):
-        self.i = i  # Row
-        self.j = j  # Column
+        self.i = i
+        self.j = j
         self.visited = False
-        # Checks to see if wall(s) of the cell exists
         # Order:   Top,  Right, Bottom, Left
         self.wall = [True, True, True, True]
         self.backtrackPathColor = False
@@ -46,7 +45,6 @@ class Cell:
         if self.wall[3]:
             pygame.draw.line(displayWindow, White, (x, y + length), (x, y), 1)
 
-    # Function adds the Unvisited to the 2D array and returns the next cell
     def countNeighbors(self, grid):
         global x, y
         self.neighbors = []
@@ -67,7 +65,6 @@ class Cell:
         else:
             left = None
 
-        # If the neighbor cell is unvisited add to array
         if top and not top.visited:
             self.neighbors.append(top)
         if right and not right.visited:
@@ -76,7 +73,7 @@ class Cell:
             self.neighbors.append(bottom)
         if left and not left.visited:
             self.neighbors.append(left)
-        # pick random unvisted cell as our next
+        # pick random unvisted cell
         if len(self.neighbors):
             p = random.randrange(len(self.neighbors))
             return self.neighbors[p]
@@ -97,7 +94,7 @@ class Cell:
             self.neighbors.clear()
 
 
-# Rows and Columns, length will be our width of each cell
+# Rows and Columns
 length = 40
 borderWidth = 800
 borderHeight = 800
@@ -125,6 +122,7 @@ x = len(grid)
 y = len(grid[i])
 
 
+# Tile -> Pixel Coords
 def leftTopofTile(a, b):
     left = xmargin + (a * length) + (a - 1)
     top = ymargin + (b * length) + (b - 1)
@@ -164,9 +162,11 @@ def update():
 
 
 def reset(surface):
+    global current
     for i in range(x):
         for j in range(y):
             grid[i][j].resetCells()
+    current = grid[0][0]
 
 
 def deleteWall(a, b):
@@ -236,6 +236,7 @@ def main():
                     if START_RECT.collidepoint(event.pos):
                         START = True
                     if RESET_RECT.collidepoint(event.pos):
+                        pygame.time.wait(500)
                         reset(displayWindow)
 
         display(displayWindow)
