@@ -1,5 +1,6 @@
 import pygame
 import random
+import queue
 screenWidth = 1000
 screenHeight = 1000
 FPS = 40
@@ -64,7 +65,6 @@ class Cell:
             left = grid[self.i - 1][self.j]
         else:
             left = None
-
         if top and not top.visited:
             self.neighbors.append(top)
         if right and not right.visited:
@@ -73,6 +73,7 @@ class Cell:
             self.neighbors.append(bottom)
         if left and not left.visited:
             self.neighbors.append(left)
+
         # pick random unvisted cell
         if len(self.neighbors):
             p = random.randrange(len(self.neighbors))
@@ -86,6 +87,7 @@ class Cell:
         else:
             pygame.draw.rect(displayWindow, Blue, (x, y, length, length))
 
+
     def resetCells(self):
         self.visited = False
         self.wall = [True, True, True, True]
@@ -93,7 +95,7 @@ class Cell:
 
 
 # Rows and Columns
-length = 40
+length = 60
 borderWidth = 800
 borderHeight = 800
 rows = borderWidth // length
@@ -116,6 +118,7 @@ for i in range(rows):
     grid.append(column)
 
 current = grid[0][0]
+end = grid[12][12]
 
 x = len(grid)
 y = len(grid[i])
@@ -150,6 +153,7 @@ def update():
     current.visited = True
     current.marker()
     next = current.countNeighbors(grid)
+    current.getEdges()
     if next:
         stack.append(current)
         deleteWall(current, next)
@@ -158,6 +162,19 @@ def update():
     elif len(stack):
         current.backtrackPathColor = True
         current = stack.pop()
+
+
+def bfs(grid, root, end):
+    # Add root node to queue
+    frontier = queue.Queue()
+    frontier.put(root)
+    came_from = {}
+    came_from[root] = None
+    root.countNeighbors(grid)
+    root.getEdges()
+    print("root's edges :", root.edges)
+    print("root's closed edges :", len(root.closed))
+    print("root's neighbors: ", len(root.neighbors))
 
 
 def reset(surface):
@@ -197,7 +214,7 @@ def makeTextBox(text, color, bgcolor, top, left):
 def drawButtons():
     displayWindow.blit(RESET_SURF, RESET_RECT)
     displayWindow.blit(START_SURF, START_RECT)
-
+    displayWindow.blit(BFS_SURF, BFS_RECT)
 
 
 def getMouseClick(surface, xpos, ypos):
@@ -211,7 +228,7 @@ def getMouseClick(surface, xpos, ypos):
 
 
 def main():
-    global displayWindow, START, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT
+    global displayWindow, START, FPS, BASICFONT, RESET_SURF, RESET_RECT, START_SURF, START_RECT, BFS_SURF, BFS_RECT, current
     pygame.init()
     FPSclock = pygame.time.Clock()
     displayWindow = pygame.display.set_mode((screenWidth, screenHeight))
@@ -219,6 +236,7 @@ def main():
     BASICFONT = pygame.font.SysFont('arial', BASICFONTSIZE)
     RESET_SURF, RESET_RECT = makeTextBox('Reset', White, Black, screenWidth - 150, screenHeight - 90)
     START_SURF, START_RECT = makeTextBox('Start', White, Black, screenWidth - 910, screenHeight - 90)
+    BFS_SURF, BFS_RECT = makeTextBox('BFS', White, Black, screenWidth - 350, screenHeight - 90)
     START = False
     running = True
 
@@ -238,6 +256,9 @@ def main():
                         START = False
                         pygame.time.wait(500)
                         reset(displayWindow)
+                    if BFS_RECT.collidepoint(event.pos):
+                        bfs(grid, current, end)
+
 
         display(displayWindow)
         pygame.display.update()
