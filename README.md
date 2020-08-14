@@ -8,5 +8,3 @@ Maze Generation using Recursive Backtracking and Pygame
 
 
 
-
-[Reference Used](https://thecodingtrain.com/CodingChallenges/010.1-maze-dfs-p5)
